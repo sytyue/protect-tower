@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+
+<style id="webmakerstyle">
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #121212;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+/* --- TITLE SCREEN --- */
+#screen-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 90vh;
+  width: 100%;
+}
+
+.title-card {
+  background: rgba(30, 39, 46, 0.9);
+  padding: 30px 20px;
+  border-radius: 16px;
+  border: 2px solid #f1c40f;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  max-width: 400px;
+  width: 90%;
+}
+
+.title-heading {
+  font-size: 2rem;
+  color: #fff;
+}
+
+.title-sub {
+  font-size: 1.1rem;
+  color: #f1c40f;
+  font-weight: bold;
+  margin: 5px 0 10px 0;
+}
+
+.title-desc {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+/* --- TITLE MENU GRID --- */
+.title-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+}
+
+.title-menu-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
+  border-radius: 12px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: transform 0.15s ease;
+}
+
+.title-menu-btn:hover {
+  transform: scale(1.04);
+}
+
+.title-menu-btn:active {
+  transform: scale(0.96);
+}
+
+.menu-icon {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.btn-battle { background: #ff4757; }
+.btn-gacha  { background: #ffa502; }
+.btn-shelf  { background: #1e90ff; }
+.btn-shop   { background: #2ed573; }
+
+/* --- MAIN GAME CONTAINER LAYOUT --- */
+#game-container {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* --- TOP NAV BAR & BACK BUTTON --- */
+.top-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.btn-back {
+  background: #57606f;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.btn-back:hover {
+  background: #747d8c;
+}
+
+.btn-start {
+  background: #2ed573;
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(46, 213, 115, 0.4);
+  transition: transform 0.2s;
+}
+
+.btn-start:hover {
+  transform: scale(1.05);
+}
+
+/* --- TOP HUD & TABS --- */
+#hud {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  background: #222;
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #444;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.currency {
+  color: #f1c40f;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.tab-btn {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  flex: 1;
+}
+
+.tab-btn.active {
+  background: #e74c3c;
+  border-color: #c0392b;
+}
+
+.view-panel {
+  display: none;
+  width: 100%;
+}
+
+.view-panel.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.panel-box {
+  background: #1e272e;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+/* --- BATTLE ARENA (TOP 55% OF SCREEN) --- */
+#game-arena {
+  width: 100%;
+  height: 55vh;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 2px solid #444;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.char {
+  position: absolute;
+  bottom: 20px;
+  font-size: 50px;
+}
+
+#hero {
+  position: absolute;
+  left: 180px;
+  bottom: 20px;
+  width: 200px;
+  height: 200px;
+}
+
+#hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* 1. Emoji Monsters (If any) */
+.char {
+  position: absolute;
+  bottom: 20px;
+  font-size: 90px !important;
+  line-height: 1;
+}
+
+/* 2. Enemy Container - Facing natural right direction */
+#enemy { 
+  right: auto !important; 
+  transform: scaleX(1) !important; 
+  transition: left 0.3s linear;
+}
+
+/* 3. PNG Image Monsters Size */
+#enemy img, 
+.enemy-img {
+  width: 180px !important;  /* Adjust monster width */
+  height: 180px !important; /* Adjust monster height */
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+}
+/* 4. PNG Boss Monster (If boss uses an image) */
+#enemy.boss img, 
+.boss-img {
+  width: 240px !important;  /* Makes Boss PNG extra large */
+  height: 240px !important;
+}
+/* --- SENTENCE & WORD BANK UI (BOTTOM PANEL) --- */
+.battle-ui-panel {
+  background: #1e272e;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #333;
+}
+
+#jp-hint {
+  text-align: center;
+  color: #f1c40f;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  min-height: 28px;
+}
+
+#answer-box {
+  width: 100%;
+  max-width: 700px;
+  min-height: 60px;
+  border: 2px dashed #f1c40f;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+#word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.word-btn {
+  background: #0984e3;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.3rem;
+}
+
+#btn-reset {
+  width: 100%;
+  max-width: 500px;
+  background: #ff7675;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* --- SHELF & SHOP GRIDS --- */
+/* --- REALISTIC WOODEN SHELF STYLING --- */
+
+/* The outer wooden cabinet frame */
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 12px; /* Extra vertical space so shelves look separated */
+  padding: 16px;
+  background: #3e2723; /* Dark mahogany wood color */
+  border: 6px solid #271510;
+  border-radius: 12px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 10px 25px rgba(0, 0, 0, 0.6);
+  margin-top: 10px;
+}
+
+/* Individual shelf slots with realistic wood plank bottoms */
+.shelf-item {
+  position: relative;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* Sits items on top of the wooden plank */
+  padding-bottom: 12px;
+  
+  /* Wood grain background gradient */
+  background: linear-gradient(to bottom, #4e342e 0%, #3e2723 80%, #2c1a16 100%);
+  border-radius: 6px 6px 0 0;
+  border-left: 2px solid #271510;
+  border-right: 2px solid #271510;
+  box-shadow: inset 0 10px 15px rgba(0, 0, 0, 0.5); /* Inner shadow for depth */
+}
+
+/* 3D Wooden Plank at the bottom of each slot */
+.shelf-item::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: -4px;
+  right: -4px;
+  height: 12px;
+  background: linear-gradient(to bottom, #8d6e63, #5d4037, #3e2723);
+  border-radius: 2px;
+  border-bottom: 3px solid #1c0d0a;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.7); /* Drops shadow onto the shelf below */
+  z-index: 2;
+}
+
+/* Make toy images sit nicely on the shelf plank */
+.shelf-item img {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6)); /* Toy shadow on shelf */
+  z-index: 1;
+}
+/* --- FULL SCREEN PRIZE MODAL --- */
+#prize-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+#prize-modal img {
+  max-width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+/* --- GACHA BANNER BUTTONS --- */
+.banner-btn {
+  background: #333;
+  color: #fff;
+  border: 1px solid #555;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.banner-btn.active {
+  background: #ffa502;
+  color: #000;
+  border-color: #f1c40f;
+}
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sentence Defense Gacha</title>
+</head>
+<body>
+
+  <!-- 1. TITLE SCREEN -->
+  <div id="screen-title" class="game-screen active">
+    <div class="title-card">
+      <h1 class="title-heading">⚔️ Sentence Defense</h1>
+      <p class="title-sub">Gacha Quest</p>
+      <p class="title-desc">Defend the castle with English sentences & spin gacha!</p>
+      
+      <!-- MENU SELECTION BUTTONS -->
+      <div class="title-menu-grid">
+        <button class="title-menu-btn btn-battle" onclick="openMode('battle')">
+          <span class="menu-icon">⚔️</span>
+          <span>Battle Stage</span>
+        </button>
+        <button class="title-menu-btn btn-gacha" onclick="openMode('gacha')">
+          <span class="menu-icon">🎰</span>
+          <span>Gacha</span>
+        </button>
+        <button class="title-menu-btn btn-shelf" onclick="openMode('shelf')">
+          <span class="menu-icon">🎒</span>
+          <span>Shelf</span>
+        </button>
+        <button class="title-menu-btn btn-shop" onclick="openMode('shop')">
+          <span class="menu-icon">🏪</span>
+          <span>Shop</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN GAME CONTAINER -->
+  <div id="game-container" style="display: none;">
+
+    <!-- TOP NAV / HUD -->
+    <div class="top-nav-bar">
+      <button class="btn-back" onclick="returnToMainPage()">⬅ Title Menu</button>
+      <div id="hud">
+        <div class="currency">🎟️ <span id="ticket-count">0</span></div>
+        <div class="currency">🪙 <span id="coin-count">0</span></div>
+      </div>
+    </div>
+
+    <!-- NAVIGATION TABS -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('battle')">⚔️ Battle</button>
+      <button class="tab-btn" onclick="switchTab('gacha')">🎰 Gacha</button>
+      <button class="tab-btn" onclick="switchTab('shelf')">🎒 Shelf</button>
+      <button class="tab-btn" onclick="switchTab('shop')">🏪 Shop</button>
+    </div>
+
+    <!-- TAB 1: BATTLE ARENA -->
+    <div id="view-battle" class="view-panel active">
+      <!-- TOP: BIG BATTLE ARENA BOX -->
+      <div id="game-arena">
+        <div id="hero">
+          <img src="hero.png" alt="Hero" id="hero-img" />
+        </div>
+        <div id="enemy" class="char">👾</div>
+        <div id="boss-hp-bar"><div id="boss-hp-fill"></div></div>
+      </div>
+
+      <!-- BOTTOM: SENTENCE & WORD BANK UI -->
+      <div class="battle-ui-panel">
+        <div id="jp-hint">わたしは スイミングが すきです。</div>
+        <div id="answer-box"></div>
+
+        <div id="word-bank">
+          <button class="word-btn" onclick="pickWord(this)">swimming.</button>
+          <button class="word-btn" onclick="pickWord(this)">like</button>
+          <button class="word-btn" onclick="pickWord(this)">I</button>
+        </div>
+
+        <button id="btn-reset" onclick="resetWords()">Reset Words</button>
+      </div>
+    </div>
+
+    <!-- TAB 2: GACHA MACHINE -->
+    <div id="view-gacha" class="view-panel">
+      <div class="panel-box">
+        <div style="display: flex; gap: 6px; margin-bottom: 15px; justify-content: center;">
+          <button class="banner-btn active" onclick="selectBanner('showa', this)">🏮 Showa</button>
+          <button class="banner-btn" onclick="selectBanner('school', this)">🏫 School</button>
+          <button class="banner-btn" onclick="selectBanner('food', this)">🍱 Food</button>
+        </div>
+
+        <h2 id="gacha-banner-title">🏮 Showa Retro Gacha</h2>
+        <p style="font-size: 0.85rem; color: #aaa; margin: 8px 0 15px 0;">Cost: 2 Tickets per spin</p>
+        <button class="btn-start" onclick="spinGacha()">Spin (🎟️ 2)</button>
+        <div id="gacha-result" style="margin-top: 15px; font-weight: bold; min-height: 30px;"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: 3D WOODEN SHELF -->
+    <div id="view-shelf" class="view-panel">
+      <div class="panel-box">
+        <h2>🎒 Toy Shelf</h2>
+        
+        <!-- SHELF CATEGORY FILTER BUTTONS -->
+        <div style="display: flex; gap: 6px; margin-bottom: 15px; justify-content: center;">
+          <button class="banner-btn active" onclick="filterShelf('all', this)">⭐ All</button>
+          <button class="banner-btn" onclick="filterShelf('showa', this)">🏮 Showa</button>
+          <button class="banner-btn" onclick="filterShelf('school', this)">🏫 School</button>
+          <button class="banner-btn" onclick="filterShelf('food', this)">🍱 Food</button>
+        </div>
+
+        <div id="shelf-container" class="shelf-grid"></div>
+      </div>
+    </div>
+
+    <!-- TAB 4: TICKET SHOP -->
+    <div id="view-shop" class="view-panel">
+      <div class="panel-box">
+        <h2>🏪 Ticket Shop</h2>
+        <p style="font-size: 0.9rem; color: #aaa; margin-bottom: 15px;">Exchange your coins for Gacha Tickets!</p>
+        
+        <div class="shop-grid">
+          <div class="shop-card" style="background: #2a2a2a; border-radius: 12px; padding: 15px; text-align: center; border: 1px solid #444;">
+            <h3>🎟️ Single Ticket</h3>
+            <p style="margin: 10px 0;">Cost: 🪙 10 Coins</p>
+            <button class="btn-start" onclick="buyTickets(1, 10)">Buy 1 Ticket</button>
+          </div>
+
+          <div class="shop-card" style="background: #2a2a2a; border-radius: 12px; padding: 15px; text-align: center; border: 1px solid #444;">
+            <h3>🎟️ Bundle Pack (5x)</h3>
+            <p style="margin: 10px 0;">Cost: 🪙 45 Coins <small style="color: #2ed573;">(Save 5 coins!)</small></p>
+            <button class="btn-start" onclick="buyTickets(5, 45)">Buy 5 Tickets</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
+
+<script>// --- Game State Variables ---
+let coins = 0;
+let tickets = 0;
+let inventory = new Set();
+
+// --- Wave & Battle State ---
+let currentMonsterIndex = 0; // 0 = Minion 1, 1 = Minion 2, 2 = Boss
+let bossHP = 3;
+let currentSentenceIndex = 0;
+let activeSentenceData = null; // Stores currently loaded random sentence
+let monsterPosition = 85; // Percentage from left
+let moveInterval = null;
+
+// Shelf Filter State ('all', 'showa', 'school', 'food')
+let activeShelfCategory = 'all';
+
+// Helper to randomize battle stage background
+function setRandomBackground() {
+  const arena = document.getElementById('game-arena');
+  if (!arena) return;
+  const randomNum = Math.floor(Math.random() * 10) + 1;
+  arena.style.backgroundImage = `url('bg${randomNum}.png')`;
+}
+
+// Sentence List for the Wave
+const waveSentences = [
+  { jp: "わたしは スイミングが すきです。", words: ["I", "like", "swimming."] },
+  { jp: "彼女は サッカーを することができます。", words: ["She", "can", "play", "soccer."] },
+  { jp: "彼は 7時に おきます。", words: ["He", "gets", "up", "at", "7:00."] },
+  { jp: "わたしは きのう 京都へ 行きました。", words: ["I", "went", "to", "Kyoto", "yesterday."] },
+  { jp: "どこに 行く予定ですか？", words: ["Where", "are", "you", "going?"] },
+  // 5th Grade (Blue Sky 1 topics: Favorites, Town/Directions, Schedules, Can/Can't)
+  { jp: "わたしは 英語が すきです。", words: ["I", "like", "English."] },
+  { jp: "まっすぐ 行ってください。", words: ["Go", "straight."] },
+  { jp: "右に まがってください。", words: ["Turn", "right."] },
+  { jp: "学校は どこですか？", words: ["Where", "is", "the", "school?"] },
+  { jp: "わたしは ピアノを ひくことができます。", words: ["I", "can", "play", "the", "piano."] },
+  { jp: "月曜日に 体育が あります。", words: ["I", "have", "P.E.", "on", "Monday."] },
+
+  // 6th Grade (Blue Sky 2 topics: Summer Vacation, Memories, Daily Routines, Junior High Dreams)
+  { jp: "夏休みに 海へ 行きました。", words: ["I", "went", "to", "the", "sea."] },
+  { jp: "カレーライスを 食べました。", words: ["I", "ate", "curry", "and", "rice."] },
+  { jp: "修学旅行を たのしみました。", words: ["I", "enjoyed", "the", "school", "trip."] },
+  { jp: "わたしは 野球部に はいたいです。", words: ["I", "want", "to", "join", "the", "baseball", "club."] },
+  { jp: "わたしは 7時半に 朝ごはんを 食べます。", words: ["I", "eat", "breakfast", "at", "7:30."] },
+  { jp: "わたしのお気に入りの 思い出は 運動会です。", words: ["My", "favorite", "memory", "is", "Sports", "Day."] },
+  // More 5th Grade (Blue Sky 1: Favorite subjects, food orders, time & daily routines)
+  { jp: "算数が 好きです。", words: ["I", "like", "math."] },
+  { jp: "ハンバーガーと ジュースを ください。", words: ["I", "want", "a", "hamburger", "and", "juice."] },
+  { jp: "いくらですか？", words: ["How", "much", "is", "it?"] },
+  { jp: "今 何時ですか？", words: ["What", "time", "is", "it?"] },
+  { jp: "8時に 寝ます。", words: ["I", "go", "to", "bed", "at", "8:00."] },
+  { jp: "わたしは 納豆を 食べることができます。", words: ["I", "can", "eat", "nattou."] },
+
+  // More 6th Grade (Blue Sky 2: Favorite places, animal habitats, future dreams, past events)
+  { jp: "図書室が お気に入りです。", words: ["My", "favorite", "place", "is", "the", "library."] },
+  { jp: "パンダは 中国に すんでいます。", words: ["Pandas", "live", "in", "China."] },
+  { jp: "わたしは 先生に なりたいです。", words: ["I", "want", "to", "be", "a", "teacher."] },
+  { jp: "わたしは サッカー選手に なりたいです。", words: ["I", "want", "to", "be", "a", "soccer", "player."] },
+  { jp: "昨日は 晴れでした。", words: ["It", "was", "sunny", "yesterday."] },
+  { jp: "公園で サッカーを しました。", words: ["I", "played", "soccer", "in", "the", "park."] }
+];
+
+// --- Item Database ---
+const itemsData = [
+  // 🏮 Showa Retro Gacha
+  { id: 'showa_1', name: 'Supercar Eraser', rarity: 'N', img: 'shshowan1.png', popupImg: 'showan1.png', cost: 5 },
+  { id: 'showa_2', name: 'Whistle Candy', rarity: 'N', img: 'shshowan2.png', popupImg: 'showan2.png', cost: 5 },
+  { id: 'showa_3', name: 'Glass Marbles', rarity: 'N', img: 'shshowan3.png', popupImg: 'showan3.png', cost: 5 },
+  { id: 'showa_4', name: 'Menko Cards', rarity: 'N', img: 'shshowan4.png', popupImg: 'showan4.png', cost: 5 },
+  { id: 'showa_5', name: 'Retro Game Console', rarity: 'R', img: 'shshowar1.png', popupImg: 'showar1.png', cost: 15 },
+  { id: 'showa_6', name: 'Showa Toy Car', rarity: 'R', img: 'shshowar2.png', popupImg: 'showar2.png', cost: 15 },
+  { id: 'showa_7', name: 'Classic Radio', rarity: 'R', img: 'shshowar3.png', popupImg: 'showar3.png', cost: 15 },
+  { id: 'showa_8', name: 'SSR Golden Console', rarity: 'SSR', img: 'shshowassr1.png', popupImg: 'showassr1.png', cost: 30 },
+
+  // 🏫 School Myths Gacha
+  { id: 'school_1', name: 'Skeleton Model', rarity: 'N', img: 'shschooln1.png', popupImg: 'schooln1.png', cost: 5 },
+  { id: 'school_2', name: 'Flying Chalk', rarity: 'N', img: 'shschooln2.png', popupImg: 'schooln2.png', cost: 5 },
+  { id: 'school_3', name: 'Running Statue', rarity: 'N', img: 'shschooln3.png', popupImg: 'schooln3.png', cost: 5 },
+  { id: 'school_4', name: 'Cute Ghost', rarity: 'N', img: 'shschooln4.png', popupImg: 'schooln4.png', cost: 5 },
+  { id: 'school_5', name: 'Haunted Clock', rarity: 'R', img: 'shschoolr1.png', popupImg: 'schoolr1.png', cost: 15 },
+  { id: 'school_6', name: 'Floating Book', rarity: 'R', img: 'shschoolr2.png', popupImg: 'schoolr2.png', cost: 15 },
+  { id: 'school_7', name: 'Magic Bell', rarity: 'R', img: 'shschoolr3.png', popupImg: 'schoolr3.png', cost: 15 },
+  { id: 'school_8', name: 'SSR Golden Wig', rarity: 'SSR', img: 'shschoolssr1.png', popupImg: 'schoolssr1.png', cost: 30 },
+
+  // 🍱 Bizarre Food Gacha
+  { id: 'food_1', name: 'Dancing Onigiri', rarity: 'N', img: 'shfoodn1.png', popupImg: 'foodn1.png', cost: 5 },
+  { id: 'food_2', name: 'Melty Ice Cream', rarity: 'N', img: 'shfoodn2.png', popupImg: 'foodn2.png', cost: 5 },
+  { id: 'food_3', name: 'Giant Takoyaki', rarity: 'N', img: 'shfoodn3.png', popupImg: 'food3.png', cost: 5 },
+  { id: 'food_4', name: 'Flying Ramen', rarity: 'N', img: 'shfoodn4.png', popupImg: 'foodn4.png', cost: 5 },
+  { id: 'food_5', name: 'Golden Curry', rarity: 'R', img: 'shfoodr1.png', popupImg: 'foodr1.png', cost: 15 },
+  { id: 'food_6', name: 'Giant Parfait', rarity: 'R', img: 'shfoodr2.png', popupImg: 'foodr2.png', cost: 15 },
+  { id: 'food_7', name: 'Special Bento', rarity: 'R', img: 'shfoodr3.png', popupImg: 'foodr3.png', cost: 15 },
+  { id: 'food_8', name: 'SSR Shabu-Shabu Pot', rarity: 'SSR', img: 'shfoodssr1.png', popupImg: 'foodssr1.png', cost: 30 }
+];
+
+// --- Save & Load System ---
+function saveData() {
+  const gameState = {
+    coins: coins,
+    tickets: tickets,
+    inventory: Array.from(inventory)
+  };
+  localStorage.setItem('sentenceDefenseSave', JSON.stringify(gameState));
+}
+
+function loadData() {
+  const saved = localStorage.getItem('sentenceDefenseSave');
+  if (saved) {
+    const gameState = JSON.parse(saved);
+    coins = gameState.coins || 0;
+    tickets = gameState.tickets || 0;
+    inventory = new Set(gameState.inventory || []);
+  }
+}
+
+// --- Mode Switcher from Title Menu ---
+function openMode(mode) {
+  const titleScreen = document.getElementById('screen-title');
+  const gameContainer = document.getElementById('game-container');
+  
+  if (titleScreen) titleScreen.style.display = 'none';
+  if (gameContainer) gameContainer.style.display = 'block';
+
+  switchTab(mode);
+
+  if (mode === 'battle') {
+    startWave();
+  }
+}
+
+// --- Status Banner Helper ---
+function showBannerMessage(text, isError = false) {
+  let banner = document.getElementById('status-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'status-banner';
+    banner.style.cssText = `
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin: 6px 0;
+      padding: 6px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    `;
+    const jpHint = document.getElementById('jp-hint');
+    if (jpHint && jpHint.parentNode) {
+      jpHint.parentNode.insertBefore(banner, jpHint.nextSibling);
+    }
+  }
+  banner.style.color = isError ? '#ff4757' : '#2ed573';
+  banner.innerText = text;
+}
+
+// --- Victory Pop-Up Modal ---
+function showVictoryModal() {
+  let modal = document.getElementById('victory-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'victory-modal';
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    `;
+    modal.innerHTML = `
+      <div style="
+        background: #1e272e;
+        border: 3px solid #f1c40f;
+        border-radius: 16px;
+        padding: 25px 20px;
+        text-align: center;
+        max-width: 320px;
+        width: 85%;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+      ">
+        <h2 style="color: #f1c40f; font-size: 1.6rem; margin-bottom: 10px;">🏆 STAGE CLEAR!</h2>
+        <div style="font-size: 3rem; margin: 15px 0;">🎟️🎟️</div>
+        <p style="font-size: 1.1rem; color: #fff; font-weight: bold; margin-bottom: 20px;">
+          You earned <span style="color: #f1c40f;">+2 Tickets</span>!
+        </p>
+        <button id="btn-victory-home" style="
+          background: #2ed573;
+          color: #fff;
+          border: none;
+          padding: 12px 24px;
+          font-size: 1.1rem;
+          font-weight: bold;
+          border-radius: 25px;
+          cursor: pointer;
+          width: 100%;
+          box-shadow: 0 4px 10px rgba(46, 213, 115, 0.4);
+        ">Return to Main Title</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  } else {
+    modal.style.display = 'flex';
+  }
+
+  document.getElementById('btn-victory-home').onclick = function() {
+    modal.style.display = 'none';
+    returnToMainPage();
+  };
+}
+
+function returnToMainPage() {
+  clearInterval(moveInterval);
+  const titleScreen = document.getElementById('screen-title');
+  const gameContainer = document.getElementById('game-container');
+  if (gameContainer) gameContainer.style.display = 'none';
+  if (titleScreen) titleScreen.style.display = 'flex';
+}
+
+// --- Full-Screen Prize Modal (Image Only + Close Button) ---
+function showPrizeModal(item, isDuplicate = false) {
+  let modal = document.getElementById('prize-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'prize-modal';
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      padding: 20px;
+    `;
+    document.body.appendChild(modal);
+  }
+
+  const displayImg = item.popupImg || item.img;
+  modal.innerHTML = `
+    <div style="
+      background: #1e272e;
+      border: 3px solid ${item.rarity === 'SSR' ? '#f1c40f' : item.rarity === 'R' ? '#a29bfe' : '#2ed573'};
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      max-width: 600px;
+      width: 92%;
+      max-height: 88vh;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+    ">
+      <div style="width: 100%; flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 16px;">
+        <img src="${displayImg}" alt="" style="
+          width: 100%;
+          max-height: 520px;
+          object-fit: contain;
+          border-radius: 12px;
+        " onerror="this.onerror=null; this.src='${item.img}';" />
+      </div>
+
+      <button onclick="closePrizeModal()" style="
+        background: #e74c3c;
+        color: #fff;
+        border: none;
+        padding: 12px 28px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-radius: 25px;
+        cursor: pointer;
+        width: 100%;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
+      ">Close</button>
+    </div>
+  `;
+  modal.style.display = 'flex';
+}
+function closePrizeModal() {
+  const modal = document.getElementById('prize-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+// --- Game & Wave Controllers ---
+function startGame() {
+  openMode('battle');
+}
+
+function startWave() {
+  currentMonsterIndex = 0;
+  currentSentenceIndex = 0;
+  bossHP = 3;
+  setRandomBackground();
+  showBannerMessage("⚔️ Defend the castle! Assemble the English sentence!");
+  spawnMonster();
+}
+
+function spawnMonster() {
+  monsterPosition = 80;
+  const enemyEl = document.getElementById('enemy');
+  const bossHpBar = document.getElementById('boss-hp-bar');
+
+  if (enemyEl) {
+    enemyEl.style.transition = 'none';
+    enemyEl.style.transform = 'scaleX(-1)';
+    enemyEl.style.opacity = '1';
+    enemyEl.style.right = 'auto';
+    enemyEl.style.left = monsterPosition + '%';
+  }
+
+  if (currentMonsterIndex < 2) {
+    const randomMinionNum = Math.floor(Math.random() * 11) + 1;
+    if (enemyEl) {
+      enemyEl.innerHTML = `<img src="monster${randomMinionNum}.png" style="width: 70px; height: 70px; object-fit: contain;" />`;
+    }
+    if (bossHpBar) bossHpBar.style.display = 'none';
+  } else {
+    const randomBossNum = Math.floor(Math.random() * 6) + 1;
+    if (enemyEl) {
+      enemyEl.innerHTML = `<img src="boss${randomBossNum}.png" style="width: 90px; height: 90px; object-fit: contain;" />`;
+    }
+    if (bossHpBar) bossHpBar.style.display = 'block';
+    updateBossHPUI();
+  }
+
+  loadCurrentSentence();
+  startMonsterMovement();
+}
+
+function startMonsterMovement() {
+  clearInterval(moveInterval);
+  const stepSpeed = currentMonsterIndex < 2 ? 400 : 800;
+
+  moveInterval = setInterval(() => {
+    monsterPosition -= 1;
+    
+    const enemyEl = document.getElementById('enemy');
+    if (enemyEl) {
+      enemyEl.style.left = monsterPosition + '%';
+    }
+
+    if (monsterPosition <= 18) {
+      clearInterval(moveInterval);
+      showBannerMessage("💥 Monster invaded the castle! Retrying wave...", true);
+      setTimeout(() => startWave(), 1200);
+    }
+  }, stepSpeed);
+}
+
+function loadCurrentSentence() {
+  const randomIndex = Math.floor(Math.random() * waveSentences.length);
+  activeSentenceData = waveSentences[randomIndex];
+  
+  const jpEl = document.getElementById('jp-hint');
+  if (jpEl) jpEl.innerText = activeSentenceData.jp;
+
+  const answerBox = document.getElementById('answer-box');
+  if (answerBox) answerBox.innerHTML = '';
+
+  const wordBank = document.getElementById('word-bank');
+  if (wordBank) {
+    wordBank.innerHTML = '';
+    const shuffled = [...activeSentenceData.words].sort(() => Math.random() - 0.5);
+    shuffled.forEach(word => {
+      const btn = document.createElement('button');
+      btn.className = 'word-btn';
+      btn.innerText = word;
+      btn.onclick = () => pickWord(btn);
+      wordBank.appendChild(btn);
+    });
+  }
+}
+
+// --- Interactive Word Picker & Validation ---
+function pickWord(btn) {
+  const answerBox = document.getElementById('answer-box');
+  if (answerBox) {
+    answerBox.appendChild(btn);
+    checkAnswer();
+  }
+}
+
+function resetWords() {
+  const wordBank = document.getElementById('word-bank');
+  const buttons = document.querySelectorAll('#answer-box .word-btn');
+  if (wordBank) buttons.forEach(btn => wordBank.appendChild(btn));
+}
+
+function defeatAnimation(callback) {
+  const enemyEl = document.getElementById('enemy');
+  if (enemyEl) {
+    enemyEl.style.transition = 'all 0.5s ease-in';
+    enemyEl.style.transform = 'translateY(120px) rotate(90deg)';
+    enemyEl.style.opacity = '0';
+  }
+  setTimeout(callback, 500);
+}
+
+function checkAnswer() {
+  const sentenceData = activeSentenceData || waveSentences[currentSentenceIndex % waveSentences.length];
+  const answerButtons = document.querySelectorAll('#answer-box .word-btn');
+  
+  if (answerButtons.length === sentenceData.words.length) {
+    let builtSentence = Array.from(answerButtons).map(btn => btn.innerText.trim()).join(' ');
+    let targetSentence = sentenceData.words.join(' ');
+
+    if (builtSentence === targetSentence) {
+      if (currentMonsterIndex < 2) {
+        clearInterval(moveInterval);
+        showBannerMessage(`⚡ Direct Hit! Minion ${currentMonsterIndex + 1} defeated!`);
+        defeatAnimation(() => {
+          currentMonsterIndex++;
+          currentSentenceIndex++;
+          spawnMonster();
+        });
+      } else {
+        bossHP--;
+        updateBossHPUI();
+        currentSentenceIndex++;
+
+        if (bossHP <= 0) {
+          clearInterval(moveInterval);
+          tickets += 2;
+          updateHUD();
+          saveData();
+          defeatAnimation(() => {
+            showVictoryModal();
+          });
+        } else {
+          showBannerMessage(`🔥 Direct Hit! Boss HP: ${bossHP}/3`);
+          monsterPosition = Math.min(85, monsterPosition + 12);
+          loadCurrentSentence();
+        }
+      }
+    } else {
+      showBannerMessage("❌ Incorrect order! Try again quickly!", true);
+      setTimeout(() => resetWords(), 400);
+    }
+  }
+}
+
+function updateBossHPUI() {
+  const fill = document.getElementById('boss-hp-fill');
+  if (fill) {
+    fill.style.width = (bossHP / 3 * 100) + '%';
+  }
+}
+
+// --- Navigation Tabs ---
+function switchTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.view-panel').forEach(panel => panel.classList.remove('active'));
+
+  const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.innerText.toLowerCase().includes(tabName));
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const activePanel = document.getElementById(`view-${tabName}`);
+  if (activePanel) activePanel.classList.add('active');
+}
+
+// --- HUD Updates ---
+function updateHUD() {
+  const ticketEl = document.getElementById('ticket-count');
+  const coinEl = document.getElementById('coin-count');
+  if (ticketEl) ticketEl.innerText = tickets;
+  if (coinEl) coinEl.innerText = coins;
+}
+
+// --- Active Banner State & Gacha System ---
+let currentBanner = 'showa'; // Options: 'showa', 'school', 'food'
+
+const bannerTitles = {
+  showa: '🏮 Showa Retro Gacha',
+  school: '🏫 School Myths Gacha',
+  food: '🍱 Bizarre Food Gacha'
+};
+
+function selectBanner(theme, btnElement) {
+  currentBanner = theme;
+  
+  document.querySelectorAll('.banner-btn').forEach(btn => btn.classList.remove('active'));
+  if (btnElement) btnElement.classList.add('active');
+
+  const titleEl = document.getElementById('gacha-banner-title');
+  if (titleEl) titleEl.innerText = bannerTitles[theme];
+}
+
+function spinGacha() {
+  if (tickets < 2) {
+    showBannerMessage("⚠️ Need at least 2 Tickets to spin!", true);
+    return;
+  }
+
+  tickets -= 2;
+
+  const rand = Math.random() * 100;
+  let targetRarity = 'N';
+  if (rand >= 50 && rand < 88) targetRarity = 'R';
+  if (rand >= 88) targetRarity = 'SSR';
+
+  const bannerPool = itemsData.filter(item => 
+    item.id.startsWith(currentBanner) && item.rarity === targetRarity
+  );
+
+  const matchingPool = bannerPool.length > 0 
+    ? bannerPool 
+    : itemsData.filter(item => item.id.startsWith(currentBanner));
+
+  const prize = matchingPool[Math.floor(Math.random() * matchingPool.length)];
+
+  let isDuplicate = inventory.has(prize.id);
+
+  if (isDuplicate) {
+    let dupCoins = prize.rarity === 'N' ? 2 : prize.rarity === 'R' ? 5 : 10;
+    coins += dupCoins;
+  } else {
+    inventory.add(prize.id);
+  }
+
+  showPrizeModal(prize, isDuplicate);
+
+  updateHUD();
+  renderShelf();
+  saveData();
+}
+
+// --- Ticket Shop System ---
+function buyTickets(amount, cost) {
+  if (coins >= cost) {
+    coins -= cost;
+    tickets += amount;
+    
+    updateHUD();
+    saveData();
+    
+    showBannerMessage(`🎉 Successfully bought ${amount} Ticket(s)!`);
+  } else {
+    showBannerMessage(`⚠️ Not enough coins! You need ${cost} coins.`, true);
+  }
+}
+
+// --- Shelf Filter System ---
+function filterShelf(category) {
+  activeShelfCategory = category;
+  renderShelf();
+}
+
+// --- Shelf Rendering ---
+function renderShelf() {
+  const shelfPanel = document.getElementById('view-shelf');
+  if (!shelfPanel) return;
+
+  let navContainer = document.getElementById('shelf-nav-filters');
+  if (!navContainer) {
+    navContainer = document.createElement('div');
+    navContainer.id = 'shelf-nav-filters';
+    navContainer.style.cssText = `
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    `;
+    shelfPanel.insertBefore(navContainer, shelfPanel.firstChild);
+  }
+
+  const categories = [
+    { id: 'all', label: '⭐ All' },
+    { id: 'showa', label: '🏮 Showa' },
+    { id: 'school', label: '🏫 School' },
+    { id: 'food', label: '🍱 Food' }
+  ];
+
+  navContainer.innerHTML = categories.map(cat => `
+    <button 
+      onclick="filterShelf('${cat.id}')" 
+      style="
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: none;
+        font-weight: bold;
+        font-size: 0.85rem;
+        cursor: pointer;
+        background: ${activeShelfCategory === cat.id ? '#f1c40f' : '#353b48'};
+        color: ${activeShelfCategory === cat.id ? '#2f3640' : '#dcdde1'};
+        box-shadow: ${activeShelfCategory === cat.id ? '0 0 8px rgba(241, 196, 15, 0.6)' : 'none'};
+        transition: all 0.2s ease;
+      ">
+      ${cat.label}
+    </button>
+  `).join('');
+
+  const container = document.getElementById('shelf-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  const filteredItems = itemsData.filter(item => {
+    if (activeShelfCategory === 'all') return true;
+    return item.id.startsWith(activeShelfCategory);
+  });
+
+  filteredItems.forEach(item => {
+    const owned = inventory.has(item.id);
+    const el = document.createElement('div');
+    el.className = 'shelf-item';
+    el.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      height: 110px;
+      border-radius: 10px;
+      background: #2f3542;
+      border: 2px solid ${owned ? (item.rarity === 'SSR' ? '#f1c40f' : item.rarity === 'R' ? '#a29bfe' : '#2ed573') : '#57606f'};
+      cursor: ${owned ? 'pointer' : 'default'};
+      opacity: ${owned ? '1' : '0.4'};
+      filter: ${owned ? 'none' : 'grayscale(100%)'};
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+    `;
+
+    if (owned) {
+      el.onclick = () => showPrizeModal(item, false);
+      el.onmouseenter = () => { el.style.transform = 'scale(1.05)'; };
+      el.onmouseleave = () => { el.style.transform = 'scale(1)'; };
+    }
+
+    const rarityColor = item.rarity === 'SSR' ? '#f1c40f' : item.rarity === 'R' ? '#a29bfe' : '#2ed573';
+
+    const imageContent = owned 
+      ? `<img src="${item.img}" alt="" style="width: 80%; height: 80px; object-fit: contain;" onerror="this.onerror=null; this.src='${item.popupImg}';" />`
+      : `<div style="font-size: 2.2rem; filter: opacity(0.3); margin-top: 6px;">❓</div>`;
+
+    el.innerHTML = `
+      <div style="font-size:0.65rem; font-weight:bold; color: ${rarityColor}; position: absolute; top: 4px; left: 6px;">
+        ${item.rarity}
+      </div>
+      ${imageContent}
+      ${!owned ? `
+        <div style="font-size: 0.7rem; font-weight: bold; color: #fff; position: absolute; bottom: 4px;">
+          🔒 Locked
+        </div>
+      ` : ''}
+    `;
+    container.appendChild(el);
+  });
+}
+
+// --- Initialize Game ---
+function init() {
+  loadData();
+  updateHUD();
+  renderShelf();
+}
+
+init();
+//# sourceURL=userscript.js
+</script>
+</body>
+</html>
